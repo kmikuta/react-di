@@ -1,17 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+
+import { DiContext, createContainer } from "./core";
+import { App } from "./app";
+import { appModule } from "./module";
+import { todosModule } from "./todos";
+
+const container = createContainer(appModule, todosModule);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <DiContext.Provider value={container}>
+      <App />
+    </DiContext.Provider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
