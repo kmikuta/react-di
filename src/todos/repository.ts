@@ -1,52 +1,29 @@
-import { Observable, of } from "rxjs";
+import { Observable } from "rxjs";
+import { ajax } from "rxjs/ajax";
 import { TodoModel } from "./model";
 import { Injectable } from "../core";
+import { pluck } from "rxjs/operators";
 
 @Injectable()
 export class TodoRepository {
-  private todos: Map<string, TodoModel> = new Map();
-
-  constructor() {
-    this.todos.set("0", {
-      id: "0",
-      name: "Do sth",
-      author: "Me",
-      finished: false,
-      created: new Date(),
-    });
-
-    this.todos.set("1", {
-      id: "1",
-      name: "And then sth",
-      author: "Me",
-      finished: false,
-      created: new Date(),
-    });
-
-    this.todos.set("2", {
-      id: "2",
-      name: "And finally sth",
-      author: "Me",
-      finished: true,
-      created: new Date(),
-    });
-  }
+  private readonly apiUrl = "/todos";
+  private readonly httpService: typeof ajax = ajax;
 
   public getAll(): Observable<TodoModel[]> {
-    return of(Array.from(this.todos.values()));
+    return this.httpService.get(this.apiUrl).pipe(pluck("response"));
   }
 
   public save(todo: TodoModel): Observable<TodoModel> {
-    const newId = this.todos.size.toString();
-    const newTodo = { ...todo, id: newId };
-    this.todos.set(newId, newTodo);
-    return of(newTodo);
+    return this.httpService
+      .post(this.apiUrl, todo, {
+        "Content-Type": "application/json",
+      })
+      .pipe(pluck("response"));
   }
 
   public toggleState(id: string): Observable<TodoModel> {
-    const todo = this.todos.get(id);
-    todo.finished = !todo.finished;
-    this.todos.set(id, todo);
-    return of(todo);
+    return this.httpService
+      .post(`${this.apiUrl}/${id}/toggle`)
+      .pipe(pluck("response"));
   }
 }

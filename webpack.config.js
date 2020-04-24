@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const mockServer = require("./mock-server");
 
 module.exports = {
   mode: "development",
@@ -22,6 +23,7 @@ module.exports = {
   devtool: "inline-source-map",
   devServer: {
     contentBase: "./dist",
+    setup: mockServer,
   },
   target: "web",
 };

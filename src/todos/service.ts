@@ -18,7 +18,6 @@ export class TodoService {
       name: "Random Todo",
       author: "Me",
       finished: false,
-      created: new Date(),
     };
 
     this.repository.save(randomTodo).subscribe((saved) => {

@@ -33,7 +33,7 @@ export class TodoStore extends RxStore<TodoState> {
 
   public updateTodo(todo: TodoModel): void {
     const items = [...this.snapshot.items];
-    const index = items.indexOf(todo);
+    const index = items.findIndex((t) => t.id === todo.id);
     items[index] = todo;
     this.setItems(items);
   }
