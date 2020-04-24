@@ -1,17 +1,21 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const mockServer = require("./mock-server");
 
 module.exports = {
-  mode: "development",
   entry: "./src/index",
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "../dist"),
     filename: "bundle.js",
   },
   module: {
-    rules: [{ test: /\.tsx?$/, loader: "ts-loader" }],
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
+      },
+    ],
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -19,11 +23,6 @@ module.exports = {
   ],
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
-  },
-  devtool: "inline-source-map",
-  devServer: {
-    contentBase: "./dist",
-    setup: mockServer,
   },
   target: "web",
 };
